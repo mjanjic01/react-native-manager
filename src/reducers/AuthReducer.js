@@ -22,20 +22,28 @@ export default (state = INITIAL_STATE, action) => {
         password: action.payload
       }
 
+    case types.USER_LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: ''
+      }
+
     case types.USER_LOGIN_SUCCESS:
       return {
         ...state,
         email: '',
         password: '',
+        loading: false,
         user: action.payload
       }
 
     case types.USER_LOGIN_FAIL:
-      console.log(action.payload);
       return {
         ...state,
-        error: 'Authentication failed.',
-        password: ''
+        password: '',
+        loading: false,
+        error: action.payload.message
       }
 
     default:

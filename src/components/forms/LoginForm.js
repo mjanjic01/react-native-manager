@@ -19,13 +19,6 @@ class LoginForm extends Component {
     this.props.loginUser({ email, password });
   }
 
-  onLoginFail() {
-  }
-
-  onLoginSuccess() {
-  }
-
-
   renderButton() {
     if (this.props.loading) {
       return <Spinner size='small' />;
@@ -63,6 +56,9 @@ class LoginForm extends Component {
             onChangeText={this.onPasswordChange.bind(this)}
           />
         </CardSection>
+        <Text style={style.errorTextStyle}>
+          {this.props.error}
+        </Text>
          <CardSection>
           {this.renderButton()}
         </CardSection>
@@ -79,10 +75,12 @@ const style = {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ auth }) => {
   return {
-    email: state.auth.email,
-    password: state.auth.password
+    email: auth.email,
+    password: auth.password,
+    error: auth.error,
+    loading: auth.loading
   }
 }
 
