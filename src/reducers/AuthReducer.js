@@ -23,7 +23,6 @@ export default (state = INITIAL_STATE, action) => {
       }
 
     case types.USER_LOGIN_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         email: '',
@@ -32,9 +31,11 @@ export default (state = INITIAL_STATE, action) => {
       }
 
     case types.USER_LOGIN_FAIL:
+      console.log(action.payload);
       return {
         ...state,
-        error: JSON.stringify(action.payload)
+        error: 'Authentication failed.',
+        password: ''
       }
 
     default:
