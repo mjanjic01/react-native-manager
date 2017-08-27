@@ -1,75 +1,81 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Picker, Text } from 'react-native';
 
 import { Button, Card, CardSection, Input, Spinner } from '../common';
 
-class LoginForm extends Component {
-  onEmailChange(text) {
-    this.props.emailChanged(text);
-  }
-
-  onPasswordChange(text) {
-    this.props.passwordChanged(text);
+class EmployeeForm extends Component {
+  onPropertyChange(prop, value) {
+    this.props.formDataUpdate({
+      prop,
+      value
+    })
   }
 
   onButtonPress() {
-    const { email, password } = this.props;
-    this.props.formSubmitted({ email, password });
+    this.props.formSubmitted(this.props.formData);
+  }
+
+  componentWillMount() {
+    this.props.formDataUpdate({
+      prop: 'shift',
+      value: 'Monday'
+    })
   }
 
   render() {
     return (
       <Card>
-         <CardSection>
+        <CardSection>
           <Input
-            label='Email:'
-            placeholder='user@cats.io'
+            label="Name:"
+            placeholder="Jane"
             autoCorrect={false}
-            autoCapitalize='none'
-            keyboardType='email-address'
-            value={this.props.email}
-            onChangeText={this.onEmailChange.bind(this)}
+            autoCapitalize="words"
+            value={this.props.formData.name}
+            onChangeText={this.onPropertyChange.bind(this, 'name')}
           />
         </CardSection>
-         <CardSection>
+        <CardSection>
           <Input
-            secureTextEntry
-            label='Password:'
-            placeholder='password'
+            label="Phone:"
+            placeholder="555-555-5555"
             autoCorrect={false}
-            autoCapitalize='none'
-            value={this.props.password}
-            onChangeText={this.onPasswordChange.bind(this)}
+            keyboardType="phone-pad"
+            value={this.props.formData.phone}
+            onChangeText={this.onPropertyChange.bind(this, 'phone')}
           />
         </CardSection>
-        {this.props.error.length > 0 &&
-          <CardSection>
-            <Text style={style.errorTextStyle}>
-              {this.props.error}
-            </Text>
-          </CardSection>
-        }
-         <CardSection>
-         {this.props.loading ? (
-            <Spinner size='small' />
-         ) : (
-            <Button onPress={this.onButtonPress.bind(this)}>
-              Log in
-            </Button>
-          )}
+        <CardSection style={{flexDirection: 'column'}}>
+          <Text style={styles.pickerLabelStyle}>Shift:</Text>
+          <Picker
+            selectedValue={this.props.formData.shift}
+            onValueChange={this.onPropertyChange.bind(this, 'shift')}
+          >
+            <Picker.Item label="Monday" value="Monday" />
+            <Picker.Item label="Tuesday" value="Tuesday" />
+            <Picker.Item label="Wednesday" value="Wednesday" />
+            <Picker.Item label="Thursday" value="Thursday" />
+            <Picker.Item label="Friday" value="Friday" />
+            <Picker.Item label="Saturday" value="Saturday" />
+            <Picker.Item label="Sunday" value="Sunday" />
+          </Picker>
+        </CardSection>
+        <CardSection>
+          <Button onPress={this.onButtonPress.bind(this)}>
+            Create
+          </Button>
         </CardSection>
       </Card>
     );
   }
 }
 
-const style = {
-  errorTextStyle: {
-    flex: 1,
-    fontSize: 16,
-    textAlign: 'center',
-    color: 'red',
+const styles = {
+  pickerLabelStyle: {
+    fontSize: 18,
+    paddingLeft: 20
   }
 }
 
-export default LoginForm;
+
+export default EmployeeForm;
