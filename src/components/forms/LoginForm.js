@@ -19,18 +19,6 @@ class LoginForm extends Component {
     this.props.loginUser({ email, password });
   }
 
-  renderButton() {
-    if (this.props.loading) {
-      return <Spinner size='small' />;
-    }
-
-    return (
-      <Button onPress={this.onButtonPress.bind(this)}>
-        Log in
-      </Button>
-    );
-  }
-
   render() {
     return (
       <Card>
@@ -60,7 +48,13 @@ class LoginForm extends Component {
           {this.props.error}
         </Text>
          <CardSection>
-          {this.renderButton()}
+         {this.props.loading ? (
+            <Spinner size='small' />;
+         ) : (
+            <Button onPress={this.onButtonPress.bind(this)}>
+              Log in
+            </Button>
+          )}
         </CardSection>
       </Card>
     );
