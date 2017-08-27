@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import LoginForm from '../components/forms/LoginForm'
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 class LoginScreen extends Component {
+  onLogin({ email, password }) {
+    this.props.loginUser({ email, password })
+      .then(Actions.main);
+  }
+
   render() {
     return (
-        <LoginForm
-          email={this.props.email}
-          password={this.props.password}
-          error={this.props.error}
-          loading={this.props.loading}
-          emailChanged={this.props.emailChanged}
-          passwordChanged={this.props.passwordChanged}
-          formSubmitted={this.props.loginUser}
-        />
+      <KeyboardAvoidingView keyboardVerticalOffset={500}>
+          <LoginForm
+            email={this.props.email}
+            password={this.props.password}
+            error={this.props.error}
+            loading={this.props.loading}
+            emailChanged={this.props.emailChanged}
+            passwordChanged={this.props.passwordChanged}
+            formSubmitted={this.onLogin.bind(this)}
+          />
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -16,22 +16,26 @@ export const passwordChanged = (text) => {
   };
 };
 
-export const loginUser = ({ email, password}) => {
+export const loginUser = ({ email, password }) => {
   return (dispatch) => {
       dispatch({
         type: types.USER_LOGIN_REQUEST
       });
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(user => {
-          dispatch({
-            type: types.USER_LOGIN_SUCCESS,
-            payload: user
-          });
-        }).catch(error => {
-          dispatch({
-            type: types.USER_LOGIN_FAIL,
-            payload: error
+      // firebase promise ends up being always resolved, custom promise wrapper as a workaround
+      return new Promise((resolve) => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(user => {
+            dispatch({
+              type: types.USER_LOGIN_SUCCESS,
+              payload: user
+            });
+            resolve();
+          }).catch(error => {
+            dispatch({
+              type: types.USER_LOGIN_FAIL,
+              payload: error
+            });
           });
         });
   };
